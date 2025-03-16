@@ -1,4 +1,4 @@
-module GoData
+module github.com/DomArruda/GoData/Dataframe
 
 go 1.24.0
 
