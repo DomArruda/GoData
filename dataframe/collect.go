@@ -23,12 +23,16 @@ func (df *DataFrame) NumRows() (int, error) {
 		return 0, nil
 	}
 	var n int
-	q := "SELECT COUNT(*) FROM (" + df.relation + ") AS _df"
+
+	// FIXED: Removed the hardcoded () and use relationExpr() instead
+	q := "SELECT COUNT(*) FROM " + df.relationExpr() + " AS _df"
+
 	if err := df.eng.db.QueryRow(q).Scan(&n); err != nil {
 		return 0, fmt.Errorf("counting rows: %w", err)
 	}
 	return n, nil
 }
+
 
 // NumCols returns the number of columns.
 func (df *DataFrame) NumCols() (int, error) {
