@@ -178,4 +178,21 @@ Ivy,34,New York,102000,2021-12-01`
 	fmt.Println("\nMaterialized grouped frame successfully")
 
 	fmt.Println("\n=== Demo finished successfully ===")
+
+
+	// Reading a csv....
+
+	fmt.Println("Reading from a csv....")
+
+	const csvFile = "data.csv"
+	csvDf, err := dataframe.ReadCSV(csvFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := csvDf.Print(5); err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("\n=== Demo finished successfully ===")
 }
