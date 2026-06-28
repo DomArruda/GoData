@@ -120,6 +120,19 @@ func buildSchema(cols []string, types []DataType) *Schema {
 	return &Schema{Columns: cols, Types: types, colIndex: idx}
 }
 
+// relationExpr returns the appropriately formatted string for the FROM clause.
+// It ensures that subqueries are wrapped in exactly one set of parentheses,
+// and base table names (like "df_5") are left unparenthesized to avoid parser errors.
+func (df *DataFrame) relationExpr() string {
+	trimmed := strings.TrimSpace(df.relation)
+	// If it's a raw SELECT query, wrap it in parentheses to make it a valid subquery.
+	if strings.HasPrefix(strings.ToUpper(trimmed), "SELECT") {
+		return "(" + df.relation + ")"
+	}
+	// If it's already wrapped in parentheses or it's a base table name, return as is.
+	return df.relation
+}
+
 // loadSchema asks DuckDB to describe this frame's relation and caches the
 // result. It runs the query with LIMIT 0 so no rows are scanned; we only want
 // the column metadata.
@@ -130,17 +143,10 @@ func (df *DataFrame) loadSchema() (*Schema, error) {
 			return
 		}
 
-		// FIX: Handle both base tables and subqueries correctly
-		var fromExpr string
-		trimmed := strings.TrimSpace(df.relation)
-		if strings.HasPrefix(trimmed, "(") || strings.HasPrefix(strings.ToUpper(trimmed), "SELECT") {
-			fromExpr = "(" + df.relation + ")"
-		} else {
-			// base table name (e.g. "df_123") — do NOT wrap in extra parentheses
-			fromExpr = df.relation
-		}
+		// Use our new helper method instead of manual checking
+		fromExpr := df.relationExpr()
 
-		q := "SELECT * FROM " + fromExpr + " AS _df LIMIT 0"
+		q := "SELECT * FROM " + fromExpr + " AS _df LIMIT 0;"
 		rows, err := df.eng.db.Query(q)
 		if err != nil {
 			df.schemaErr = fmt.Errorf("describing relation: %w", err)
