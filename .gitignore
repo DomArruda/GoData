@@ -1,0 +1,48 @@
+# Go
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+vendor/
+
+# Go workspace
+go.work
+go.work.sum
+
+# Test binary
+main
+main.exe
+
+# IDE / Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# DuckDB / Data files (optional but recommended)
+*.duckdb
+*.db
+*.wal
+*.csv
+*.parquet
+*.json
+!testdata/
+!examples/data/
+
+# Build artifacts
+dist/
+build/
