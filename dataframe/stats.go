@@ -58,10 +58,10 @@ func (df *DataFrame) Describe() (*DataFrame, error) {
 	// present in the FROM relation even when EXCLUDEd from the projection.
 	ordered := make([]string, len(selects))
 	for i, sel := range selects {
-		ordered[i] = fmt.Sprintf("SELECT %d AS _ord, * FROM (%s) AS _s", i, sel)
+		ordered[i] = fmt.Sprintf("SELECT %d AS _ord, * FROM %s AS _s", i, sel)
 	}
 	union := strings.Join(ordered, " UNION ALL ")
-	final := fmt.Sprintf("SELECT * EXCLUDE (_ord) FROM (%s) AS _u ORDER BY _ord", union)
+	final := fmt.Sprintf("SELECT * EXCLUDE (_ord) FROM %s AS _u ORDER BY _ord", union)
 
 	return newDataFrame(df.eng, final), nil
 }
@@ -96,7 +96,7 @@ func (df *DataFrame) CumSum() (*DataFrame, error) {
 		}
 	}
 
-	q := fmt.Sprintf("SELECT %s FROM (%s) AS _r ORDER BY _rn",
+	q := fmt.Sprintf("SELECT %s FROM %s AS _r ORDER BY _rn",
 		strings.Join(projs, ", "), withRowNum)
 	return newDataFrame(df.eng, q), nil
 }
