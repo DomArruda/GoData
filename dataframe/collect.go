@@ -94,7 +94,7 @@ func (df *DataFrame) Iterate(fn func(Row) (bool, error)) error {
 	if err != nil {
 		return err
 	}
-	q := "SELECT * FROM (" + df.relation + ") AS _df"
+	q := "SELECT * FROM " + df.relation + " AS _df"
 	rows, err := df.eng.db.Query(q)
 	if err != nil {
 		return fmt.Errorf("iterating rows: %w", err)
