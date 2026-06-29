@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"GoData/dataframe"
+	"github.com/DomArruda/GoData/dataframe"
 )
 
 func main() {
