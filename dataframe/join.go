@@ -120,7 +120,7 @@ func (df *DataFrame) Concat(other *DataFrame) (*DataFrame, error) {
 	}
 	// UNION ALL BY NAME matches columns by name and fills the rest with NULL,
 	// so differing-but-overlapping schemas concatenate sensibly.
-	q := fmt.Sprintf("SELECT * FROM (%s) AS _a UNION ALL BY NAME SELECT * FROM (%s) AS _b",
+	q := fmt.Sprintf("SELECT * FROM %s AS _a UNION ALL BY NAME SELECT * FROM %s AS _b",
 		df.relation, other.relation)
 	return newDataFrame(df.eng, q), nil
 }
