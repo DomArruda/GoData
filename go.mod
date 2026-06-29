@@ -1,4 +1,4 @@
-module GoData
+module github.com/DomArruda/GoData
 
 go 1.26.2
 
