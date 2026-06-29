@@ -140,9 +140,3 @@ desc.Print()
 mat, err := grouped.Materialize()
 defer mat.Release()
 ```
-
-
-
-## License
-
-[Add your license here]
